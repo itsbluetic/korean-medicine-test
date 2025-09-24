@@ -1,0 +1,27 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="80" fill="#2563eb"/>
+
+  <!-- Main symbol - Yin Yang inspired but stylized for constitution -->
+  <circle cx="256" cy="256" r="180" fill="white"/>
+
+  <!-- Four sections representing four constitutions -->
+  <path d="M256 76 L256 256 L436 256 A180 180 0 0 0 256 76" fill="#3b82f6"/>
+  <path d="M256 256 L256 436 L76 256 A180 180 0 0 0 256 436" fill="#3b82f6"/>
+
+  <!-- Inner circles -->
+  <circle cx="320" cy="192" r="40" fill="white"/>
+  <circle cx="192" cy="320" r="40" fill="#2563eb"/>
+
+  <!-- Center dot -->
+  <circle cx="256" cy="256" r="15" fill="#1e40af"/>
+
+  <!-- Korean character elements (stylized) -->
+  <rect x="240" y="140" width="8" height="60" rx="4" fill="white"/>
+  <rect x="264" y="140" width="8" height="60" rx="4" fill="white"/>
+  <rect x="320" cy="176" width="60" height="8" rx="4" fill="#2563eb"/>
+
+  <rect x="148" y="300" width="8" height="60" rx="4" fill="#2563eb"/>
+  <rect x="172" y="300" width="8" height="60" rx="4" fill="#2563eb"/>
+  <rect x="140" cy="336" width="60" height="8" rx="4" fill="white"/>
+</svg>
