@@ -1,11 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { TestResult } from "@/types";
+import { TestResult, LegacyTestResult } from "@/types";
 import { shareResult, shareToSocialMedia, downloadResult } from "@/lib/share";
 
 interface ShareButtonProps {
-  result: TestResult;
+  result: TestResult | LegacyTestResult;
 }
 
 export default function ShareButton({ result }: ShareButtonProps) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { UserAnswer, TestResult } from "@/types";
+import { UserAnswer, LegacyTestResult } from "@/types";
 import { questions } from "@/data/questions";
 import { generateTestResult } from "@/lib/diagnosis";
 
@@ -11,7 +11,7 @@ export function useConstitutionTest() {
   const [testState, setTestState] = useState<TestState>("start");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<UserAnswer[]>([]);
-  const [testResult, setTestResult] = useState<TestResult | null>(null);
+  const [testResult, setTestResult] = useState<LegacyTestResult | null>(null);
 
   const startTest = useCallback(() => {
     setTestState("testing");

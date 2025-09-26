@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { TestResult } from "@/types";
+import { TestResult, LegacyTestResult } from "@/types";
 
 interface SavedTestResult extends TestResult {
   id: string;
@@ -38,9 +38,40 @@ export function useTestHistory() {
   }, []);
 
   // 새로운 테스트 결과 저장
-  const saveResult = useCallback((result: TestResult): string => {
+  const saveResult = useCallback((result: TestResult | LegacyTestResult): string => {
+    // 레거시 타입을 새 타입으로 변환
+    const convertLegacyToNew = (legacyResult: LegacyTestResult): TestResult => {
+      const typeMapping = {
+        taeyang: "taeyangin" as const,
+        taeeum: "taeumin" as const,
+        soyang: "soyangin" as const,
+        soeum: "soeumin" as const,
+      };
+
+      const newScores = {
+        taeyangin: legacyResult.scores.taeyang,
+        taeumin: legacyResult.scores.taeeum,
+        soyangin: legacyResult.scores.soyang,
+        soeumin: legacyResult.scores.soeum,
+      };
+
+      return {
+        constitution: typeMapping[legacyResult.constitution],
+        scores: newScores,
+        confidence: legacyResult.confidence,
+        characteristics: legacyResult.characteristics,
+        recommendations: legacyResult.recommendations,
+      };
+    };
+
+    // 타입 변환 여부 확인 (LegacyConstitutionWeights has taeyang property)
+    const isLegacy = 'taeyang' in (result.scores as LegacyTestResult['scores']);
+    const normalizedResult: TestResult = isLegacy
+      ? convertLegacyToNew(result as LegacyTestResult)
+      : result as TestResult;
+
     const savedResult: SavedTestResult = {
-      ...result,
+      ...normalizedResult,
       id: generateId(),
       timestamp: Date.now(),
       userAgent: typeof navigator !== "undefined" ? navigator.userAgent : undefined,

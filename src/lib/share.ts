@@ -1,5 +1,5 @@
-import { TestResult } from "@/types";
-import { getConstitutionInfo } from "@/data/constitutions";
+import { TestResult, LegacyTestResult } from "@/types";
+import { getConstitutionInfo, getLegacyConstitutionInfo } from "@/data/constitutions";
 
 export interface ShareOptions {
   title?: string;
@@ -7,8 +7,12 @@ export interface ShareOptions {
   url?: string;
 }
 
-export function generateShareText(result: TestResult): string {
-  const constitutionInfo = getConstitutionInfo(result.constitution);
+export function generateShareText(result: TestResult | LegacyTestResult): string {
+  // 레거시 결과인지 확인
+  const isLegacy = 'taeyang' in (result.scores as LegacyTestResult['scores']);
+  const constitutionInfo = isLegacy
+    ? getLegacyConstitutionInfo((result as LegacyTestResult).constitution)
+    : getConstitutionInfo((result as TestResult).constitution);
 
   return `🔮 한의학적 체질 진단 결과
 
@@ -27,7 +31,7 @@ export function generateShareUrl(): string {
   return "https://korean-medicine-test.vercel.app"; // fallback URL
 }
 
-export async function shareResult(result: TestResult): Promise<boolean> {
+export async function shareResult(result: TestResult | LegacyTestResult): Promise<boolean> {
   const shareText = generateShareText(result);
   const shareUrl = generateShareUrl();
 
@@ -83,7 +87,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 
 export function shareToSocialMedia(
   platform: "twitter" | "facebook" | "kakao",
-  result: TestResult
+  result: TestResult | LegacyTestResult
 ): void {
   const text = generateShareText(result);
   const url = generateShareUrl();
@@ -117,8 +121,12 @@ export function shareToSocialMedia(
   }
 }
 
-export function downloadResult(result: TestResult, format: "json" | "txt" = "txt"): void {
-  const constitutionInfo = getConstitutionInfo(result.constitution);
+export function downloadResult(result: TestResult | LegacyTestResult, format: "json" | "txt" = "txt"): void {
+  // 레거시 결과인지 확인
+  const isLegacy = 'taeyang' in (result.scores as LegacyTestResult['scores']);
+  const constitutionInfo = isLegacy
+    ? getLegacyConstitutionInfo((result as LegacyTestResult).constitution)
+    : getConstitutionInfo((result as TestResult).constitution);
   const timestamp = new Date().toLocaleString("ko-KR");
 
   let content = "";
@@ -153,10 +161,10 @@ ${result.characteristics.map((char, i) => `${i + 1}. ${char}`).join('\n')}
 ${result.recommendations.map((rec, i) => `${i + 1}. ${rec}`).join('\n')}
 
 📈 점수 분포:
-- 태양인: ${result.scores.taeyang}점
-- 태음인: ${result.scores.taeeum}점
-- 소양인: ${result.scores.soyang}점
-- 소음인: ${result.scores.soeum}점
+- 태양인: ${isLegacy ? (result as LegacyTestResult).scores.taeyang : (result as TestResult).scores.taeyangin}점
+- 태음인: ${isLegacy ? (result as LegacyTestResult).scores.taeeum : (result as TestResult).scores.taeumin}점
+- 소양인: ${isLegacy ? (result as LegacyTestResult).scores.soyang : (result as TestResult).scores.soyangin}점
+- 소음인: ${isLegacy ? (result as LegacyTestResult).scores.soeum : (result as TestResult).scores.soeumin}점
 
 * 이 진단 결과는 참고용이며, 정확한 체질 판정은 한의사의 진료를 받으시기 바랍니다.`;
 

@@ -1,5 +1,5 @@
-import { TestResult as TestResultType } from "@/types";
-import { getConstitutionInfo } from "@/data/constitutions";
+import { LegacyTestResult as TestResultType } from "@/types";
+import { getLegacyConstitutionInfo } from "@/data/constitutions";
 import { getConfidenceMessage, getScoreDistribution } from "@/lib/diagnosis";
 import { useTestHistory } from "@/hooks/useTestHistory";
 import ShareButton from "./ShareButton";
@@ -18,7 +18,7 @@ const constitutionNames: Record<string, string> = {
 };
 
 export default function TestResult({ result, onRetakeTest }: TestResultProps) {
-  const constitutionInfo = getConstitutionInfo(result.constitution);
+  const constitutionInfo = getLegacyConstitutionInfo(result.constitution);
   const confidenceMessage = getConfidenceMessage(result.confidence);
   const scoreDistribution = getScoreDistribution(result.scores);
   const { saveResult } = useTestHistory();
@@ -68,28 +68,31 @@ export default function TestResult({ result, onRetakeTest }: TestResultProps) {
           체질별 점수 분포
         </h3>
         <div className="space-y-3">
-          {Object.entries(scoreDistribution).map(([constitution, percentage]) => (
-            <div key={constitution} className="flex items-center">
-              <div className="w-20 text-sm font-medium text-gray-600 dark:text-gray-400">
-                {constitutionNames[constitution]}
-              </div>
-              <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-6 mr-3">
-                <div
-                  className={`h-6 rounded-full flex items-center justify-center text-xs font-medium text-white ${
-                    constitution === result.constitution
-                      ? "bg-blue-600 dark:bg-blue-500"
-                      : "bg-gray-400 dark:bg-gray-600"
-                  }`}
-                  style={{ width: `${percentage}%` }}
-                >
-                  {percentage > 10 ? `${percentage}%` : ""}
+          {Object.entries(scoreDistribution).map(([constitution, percentage]) => {
+            const percentageNum = percentage as number;
+            return (
+              <div key={constitution} className="flex items-center">
+                <div className="w-20 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  {constitutionNames[constitution]}
+                </div>
+                <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-6 mr-3">
+                  <div
+                    className={`h-6 rounded-full flex items-center justify-center text-xs font-medium text-white ${
+                      constitution === result.constitution
+                        ? "bg-blue-600 dark:bg-blue-500"
+                        : "bg-gray-400 dark:bg-gray-600"
+                    }`}
+                    style={{ width: `${percentageNum}%` }}
+                  >
+                    {percentageNum > 10 ? `${percentageNum}%` : ""}
+                  </div>
+                </div>
+                <div className="w-12 text-sm font-medium text-gray-600 dark:text-gray-400">
+                  {percentageNum}%
                 </div>
               </div>
-              <div className="w-12 text-sm font-medium text-gray-600 dark:text-gray-400">
-                {percentage}%
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

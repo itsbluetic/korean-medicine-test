@@ -1,4 +1,4 @@
-import { ConstitutionInfo, ConstitutionType } from "@/types";
+import { ConstitutionInfo, ConstitutionType, LegacyConstitutionType } from "@/types";
 
 export const constitutions: Record<ConstitutionType, ConstitutionInfo> = {
   taeyangin: {
@@ -179,6 +179,20 @@ export const getConstitutionInfo = (
   type: ConstitutionType
 ): ConstitutionInfo => {
   return constitutions[type];
+};
+
+// 레거시 타입을 새 타입으로 매핑하는 함수
+export const getLegacyConstitutionInfo = (
+  type: LegacyConstitutionType
+): ConstitutionInfo => {
+  const typeMapping: Record<LegacyConstitutionType, ConstitutionType> = {
+    taeyang: "taeyangin",
+    taeeum: "taeumin",
+    soyang: "soyangin",
+    soeum: "soeumin",
+  };
+
+  return constitutions[typeMapping[type]];
 };
 
 // 레거시 호환성을 위한 별칭

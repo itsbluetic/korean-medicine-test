@@ -1,11 +1,11 @@
 import {
-  ConstitutionType,
+  LegacyConstitutionType,
   LegacyConstitutionWeights,
-  TestResult,
+  LegacyTestResult,
   UserAnswer,
 } from "@/types";
 import { questions } from "@/data/questions";
-import { getConstitutionInfo } from "@/data/constitutions";
+import { getLegacyConstitutionInfo } from "@/data/constitutions";
 
 export function calculateConstitutionScores(
   answers: UserAnswer[]
@@ -38,8 +38,8 @@ export function calculateConstitutionScores(
 
 export function determineConstitution(
   scores: LegacyConstitutionWeights
-): ConstitutionType {
-  const constitutions: ConstitutionType[] = [
+): LegacyConstitutionType {
+  const constitutions: LegacyConstitutionType[] = [
     "taeyang",
     "taeeum",
     "soyang",
@@ -51,7 +51,7 @@ export function determineConstitution(
   );
 }
 
-export function calculateConfidence(scores: ConstitutionWeights): number {
+export function calculateConfidence(scores: LegacyConstitutionWeights): number {
   const totalScore = Object.values(scores).reduce(
     (sum, score) => sum + score,
     0
@@ -65,11 +65,11 @@ export function calculateConfidence(scores: ConstitutionWeights): number {
   return Math.round(confidence);
 }
 
-export function generateTestResult(answers: UserAnswer[]): TestResult {
+export function generateTestResult(answers: UserAnswer[]): LegacyTestResult {
   const scores = calculateConstitutionScores(answers);
   const constitution = determineConstitution(scores);
   const confidence = calculateConfidence(scores);
-  const constitutionInfo = getConstitutionInfo(constitution);
+  const constitutionInfo = getLegacyConstitutionInfo(constitution);
 
   return {
     constitution,
@@ -100,8 +100,8 @@ export function getConfidenceMessage(confidence: number): string {
 
 // 점수 분포를 백분율로 변환
 export function getScoreDistribution(
-  scores: ConstitutionWeights
-): ConstitutionWeights {
+  scores: LegacyConstitutionWeights
+): LegacyConstitutionWeights {
   const totalScore = Object.values(scores).reduce(
     (sum, score) => sum + score,
     0

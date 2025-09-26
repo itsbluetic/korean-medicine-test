@@ -88,18 +88,19 @@ export function diagnoseKS15Constitution(testData: KS15TestData): DiagnosisResul
   const maxRange = Math.max(...scores) - minScore;
 
   const normalizedScores = {
+    taeyangin: 0, // KS-15에서는 태양인 진단하지 않음
     taeumin: maxRange > 0 ? Math.round(((scores[0] - minScore) / maxRange) * 100) : 33,
     soyangin: maxRange > 0 ? Math.round(((scores[1] - minScore) / maxRange) * 100) : 33,
     soeumin: maxRange > 0 ? Math.round(((scores[2] - minScore) / maxRange) * 100) : 33,
   };
 
   // 7. 상세 분석 생성
-  const analysis = generateKS15Analysis(scores, testData, bmi, primaryConstitution);
+  const analysis = generateKS15Analysis(scores, testData, bmi);
 
   return {
     constitution: primaryConstitution as ConstitutionType,
     confidence: Math.round(confidence),
-    scores: normalizedScores as { [key in ConstitutionType]: number },
+    scores: normalizedScores,
     details: constitutions[primaryConstitution === 'taeumin' ? 'taeumin' :
                          primaryConstitution === 'soyangin' ? 'soyangin' : 'soeumin'] || constitutions.taeumin,
     bmi: Math.round(bmi * 10) / 10,
@@ -157,8 +158,7 @@ function calculateConfidence(scoreDiff: number, scores: [number, number, number]
 function generateKS15Analysis(
   scores: [number, number, number],
   testData: KS15TestData,
-  bmi: number,
-  _primaryConstitution: ConstitutionType
+  bmi: number
 ): string[] {
   const analysis: string[] = [];
 

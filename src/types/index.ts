@@ -82,6 +82,15 @@ export interface TestResult {
   recommendations: string[];
 }
 
+// 레거시 테스트 결과
+export interface LegacyTestResult {
+  constitution: LegacyConstitutionType;
+  scores: LegacyConstitutionWeights;
+  confidence: number;
+  characteristics: string[];
+  recommendations: string[];
+}
+
 // 사용자 답변
 export interface UserAnswer {
   questionId: number;
