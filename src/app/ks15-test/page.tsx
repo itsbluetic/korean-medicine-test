@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { ks15Questions } from '../../data/ks15-questions-corrected';
-import { diagnoseKS15Constitution, KS15TestData } from '../../lib/ks15-diagnosis-corrected';
-import { DiagnosisResult } from '../../types';
+import { ks15Questions } from '@/data/ks15-questions';
+import { diagnoseKS15Constitution, KS15TestData } from '@/lib/ks15-diagnosis';
+import { DiagnosisResult } from '@/types';
 
 export default function KS15TestPage() {
   const [currentStep, setCurrentStep] = useState<'userInfo' | 'questions' | 'results'>('userInfo');

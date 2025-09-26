@@ -1,210 +1,146 @@
-import { Question, ConstitutionType } from '../types';
+// KS-15 실제 질문 (k_15_wt.dbf 데이터 기반, 한국어로 정리)
+export interface KS15Question {
+  id: number;
+  question: string;
+  category: string;
+  options: {
+    id: string;
+    text: string;
+    weights: {
+      male: number[];
+      female: number[];
+    };
+    is_default?: boolean;
+  }[];
+}
 
-// KS-15 표준 체질 진단 질문 시스템
-// Reference: ks15_set.dbf 파싱 데이터 기반
-
-export const ks15Questions: Question[] = [
-  // 성격 관련 질문 (1-6)
+export const ks15Questions: KS15Question[] = [
   {
     id: 1,
-    category: 'personality',
-    question: '성격이 대범하신가요. 섬세하신가요?',
+    question: "당신의 성격은?",
+    category: "personality",
     options: [
-      { id: 'broad', text: '1. 대범', weights: { taeyangin: 1.621, taeumin: -5.496, soyangin: 1.444, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 중간', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'detailed', text: '3. 섬세', weights: { taeyangin: -3.576, taeumin: 7.991, soyangin: 0.0, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "대범하고 진취적", weights: { male: [1.621, -5.496, 1.444], female: [4.496, -9.484, 0.0] }, is_default: true },
+      { id: "b", text: "보통", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "c", text: "섬세하고 신중함", weights: { male: [0, 3.507, 0], female: [-3.576, 7.991, 0] } },
+    ],
   },
   {
     id: 2,
-    category: 'personality',
-    question: '행동이 빠른 편인가요. 느린 편인가요?',
+    question: "행동이나 일 처리는?",
+    category: "behavior",
     options: [
-      { id: 'fast', text: '1. 빠르다', weights: { taeyangin: -6.467, taeumin: 0.0, soyangin: 7.432, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 중간', weights: { taeyangin: 2.521, taeumin: 0.0, soyangin: -2.97, soeumin: 0.0 } },
-      { id: 'slow', text: '3. 느리다', weights: { taeyangin: 2.829, taeumin: 0.0, soyangin: -3.087, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "빠르게 처리함", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "보통", weights: { male: [2.521, 0, -2.97], female: [2.521, 0, -2.97] }, is_default: true },
+      { id: "c", text: "천천히 신중하게", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+    ],
   },
   {
     id: 3,
-    category: 'personality',
-    question: '모든 일에 적극적인가요. 소극적인가요?',
+    question: "일할 때의 자세는?",
+    category: "work_attitude",
     options: [
-      { id: 'active', text: '1. 적극적', weights: { taeyangin: 0.0, taeumin: -5.655, soyangin: 3.969, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 중간', weights: { taeyangin: 0.0, taeumin: 1.991, soyangin: -1.521, soeumin: 0.0 } },
-      { id: 'passive', text: '3. 소극적', weights: { taeyangin: 0.0, taeumin: 3.04, soyangin: -2.04, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "적극적", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "보통", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "c", text: "소극적", weights: { male: [0, 3.04, -2.04], female: [0, 3.04, -2.04] }, is_default: true },
+    ],
   },
   {
     id: 4,
-    category: 'personality',
-    question: '성격이 외향적인가요. 내성적인가요?',
+    question: "성격 유형은?",
+    category: "personality_type",
     options: [
-      { id: 'extrovert', text: '1. 외향', weights: { taeyangin: 0.0, taeumin: -3.274, soyangin: 3.923, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 중간', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'introvert', text: '3. 내성', weights: { taeyangin: 0.0, taeumin: 2.829, soyangin: -3.087, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "외향적", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "보통 (외향/내향)", weights: { male: [0, 0, 0], female: [0, 0, 0] }, is_default: true },
+      { id: "c", text: "내향적", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "d", text: "남성적 성향", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "e", text: "보통 (남성/여성)", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "f", text: "여성적 성향", weights: { male: [0, 2.282, 0], female: [0, 2.282, 0] }, is_default: true },
+      { id: "g", text: "감정적", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "h", text: "보통 (감정/이성)", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "i", text: "이성적", weights: { male: [0, 0, -1.869], female: [0, 0, -1.869] }, is_default: true },
+    ],
   },
   {
     id: 5,
-    category: 'personality',
-    question: '남성적인 편인가요. 여성적인 편인가요?',
+    question: "소화는 어떻습니까?",
+    category: "digestion",
     options: [
-      { id: 'masculine', text: '1. 남성적', weights: { taeyangin: 2.113, taeumin: -6.669, soyangin: 1.419, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 중간', weights: { taeyangin: 0.0, taeumin: 3.157, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'feminine', text: '3. 여성적', weights: { taeyangin: 0.0, taeumin: 2.282, soyangin: 0.0, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "잘 됨", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "잘 안되지만 불편하지 않음", weights: { male: [-3.565, -2.413, 5.126], female: [-3.565, -2.413, 5.126] }, is_default: true },
+      { id: "c", text: "잘 안되고 불편함", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+    ],
   },
   {
     id: 6,
-    category: 'personality',
-    question: '가끔 흥분하는 편인가요? 이성적인 편인가요?',
+    question: "평소 입맛은?",
+    category: "appetite",
     options: [
-      { id: 'emotional', text: '1. 흥분', weights: { taeyangin: 0.0, taeumin: -1.77, soyangin: 1.444, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 중간', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'rational', text: '3. 이성', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: -1.869, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "좋음", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "보통", weights: { male: [2.782, -2.325, 1.595], female: [2.782, -2.325, 1.595] }, is_default: true },
+      { id: "c", text: "좋지 않음", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+    ],
   },
-
-  // 증상 관련 질문 (7-14)
   {
     id: 7,
-    category: 'digestion',
-    question: '평소 소화는 어떠한가요?',
+    question: "땀은 어느 정도 납니까?",
+    category: "sweat",
     options: [
-      { id: 'good', text: '1. 잘된다', weights: { taeyangin: 1.721, taeumin: -4.952, soyangin: 1.596, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 보통', weights: { taeyangin: -3.565, taeumin: 8.435, soyangin: -1.596, soeumin: 0.0 } },
-      { id: 'poor', text: '3. 안된다', weights: { taeyangin: -1.721, taeumin: 6.943, soyangin: -1.596, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "많이 남", weights: { male: [-0.781, 1.708, -1.195], female: [-0.781, 1.708, -1.195] }, is_default: true },
+      { id: "b", text: "보통", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "c", text: "조금 남", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+    ],
   },
   {
     id: 8,
-    category: 'digestion',
-    question: '평소 입맛은 어떠한가요?',
+    question: "땀을 흘린 후 기분은?",
+    category: "sweat_feeling",
     options: [
-      { id: 'good', text: '1. 좋은 편', weights: { taeyangin: 6.535, taeumin: -8.747, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'average', text: '2. 중간', weights: { taeyangin: -4.975, taeumin: 6.309, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'poor', text: '3. 안좋다', weights: { taeyangin: -1.342, taeumin: 1.342, soyangin: 0.0, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "상쾌함", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "피곤함", weights: { male: [1.95, -1.667, 0.774], female: [1.95, -1.667, 0.774] }, is_default: true },
+      { id: "c", text: "별 차이 없음", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+    ],
   },
   {
     id: 9,
-    category: 'temperature',
-    question: '평소 땀을 어느 정도 흘리는 편인가요?',
+    question: "변비로 고생하시나요?",
+    category: "bowel",
     options: [
-      { id: 'much', text: '1. 많다', weights: { taeyangin: 4.861, taeumin: -4.587, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'moderate', text: '2. 중간', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'little', text: '3. 적다', weights: { taeyangin: -2.695, taeumin: 4.493, soyangin: 0.0, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "자주", weights: { male: [2.623, 1.389, -4.236], female: [2.623, 1.389, -4.236] }, is_default: true },
+      { id: "b", text: "가끔", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "c", text: "거의 없음", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+    ],
   },
   {
     id: 10,
-    category: 'temperature',
-    question: '땀을 흘리고 난 뒤 기분이 어떠한가요?',
+    question: "밤에 소변 보러 일어나는 횟수는?",
+    category: "urination",
     options: [
-      { id: 'refreshed', text: '1. 상쾌', weights: { taeyangin: 2.186, taeumin: -3.669, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'tired', text: '2. 피곤', weights: { taeyangin: -4.997, taeumin: 6.039, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'no_difference', text: '3. 아무느낌 없다', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "0번", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "1번", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "c", text: "2번 이상", weights: { male: [1.831, 0.775, -2.879], female: [1.831, 0.775, -2.879] }, is_default: true },
+    ],
   },
   {
     id: 11,
-    category: 'bowel',
-    question: '대변이 마려운 신호가 왔을때 참기 어려움',
+    question: "온도 적응력은?",
+    category: "temperature_adaptation",
     options: [
-      { id: 'often', text: '1. 자주', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'sometimes', text: '2. 가끔', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'never', text: '3. 없다', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "추위를 못참음", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "더위를 못참음", weights: { male: [-2.468, 2.468, 1.423], female: [-2.468, 2.468, 1.423] }, is_default: true },
+      { id: "c", text: "둘 다 잘 견딤", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+    ],
   },
   {
     id: 12,
-    category: 'urination',
-    question: '밤(잠잘때)에 소변을 몇 회 보나요?',
+    question: "평소 물은 어떻게 드십니까?",
+    category: "water_preference",
     options: [
-      { id: 'none', text: '1. 0회', weights: { taeyangin: 0.0, taeumin: 1.894, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'once', text: '2. 1회', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'multiple', text: '3. 2회이상', weights: { taeyangin: 0.0, taeumin: -2.48, soyangin: 0.0, soeumin: 0.0 } }
-    ]
+      { id: "a", text: "뜨거운 물", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "b", text: "차가운 물", weights: { male: [0, 0, 0], female: [0, 0, 0] } },
+      { id: "c", text: "상관없음", weights: { male: [1.155, -0.543, -0.832], female: [1.155, -0.543, -0.832] }, is_default: true },
+    ],
   },
-  {
-    id: 13,
-    category: 'temperature',
-    question: '평소 추위, 더위 어느 것이 더 싫은가요?',
-    options: [
-      { id: 'cold', text: '1. 추위', weights: { taeyangin: -6.129, taeumin: 6.422, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'heat', text: '2. 더위', weights: { taeyangin: 9.239, taeumin: -7.655, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'both', text: '3. 모두 무관하다', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } }
-    ]
-  },
-  {
-    id: 14,
-    category: 'temperature',
-    question: '평소 마시는 물의 온도는 어떠한가요?',
-    options: [
-      { id: 'hot', text: '1. 온수', weights: { taeyangin: -1.967, taeumin: 3.134, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'cold', text: '2. 냉수', weights: { taeyangin: 0.0, taeumin: -1.368, soyangin: 0.0, soeumin: 0.0 } },
-      { id: 'any', text: '3. 가리지 않는다', weights: { taeyangin: 0.0, taeumin: 0.0, soyangin: 0.0, soeumin: 0.0 } }
-    ]
-  }
 ];
 
-// BMI 기반 체형 평가를 위한 함수
-export function calculateBMIScore(bmi: number): { [key in ConstitutionType]: number } {
-  // BMI 구간별 체질 점수 (참고 데이터 기반 추정)
-  if (bmi < 18.5) {
-    // 저체중 - 소음인 성향
-    return {
-      taeyangin: -2.0,
-      taeumin: -3.0,
-      soyangin: 1.0,
-      soeumin: 4.0
-    };
-  } else if (bmi >= 18.5 && bmi < 23) {
-    // 정상체중 - 균형
-    return {
-      taeyangin: 0.0,
-      taeumin: 0.0,
-      soyangin: 0.0,
-      soeumin: 0.0
-    };
-  } else if (bmi >= 23 && bmi < 25) {
-    // 과체중 - 태음인 성향
-    return {
-      taeyangin: 1.0,
-      taeumin: 2.0,
-      soyangin: -1.0,
-      soeumin: -2.0
-    };
-  } else if (bmi >= 25 && bmi < 30) {
-    // 비만 - 태음인 성향 강화
-    return {
-      taeyangin: 2.0,
-      taeumin: 4.0,
-      soyangin: -2.0,
-      soeumin: -4.0
-    };
-  } else {
-    // 고도비만 - 태음인 성향 최대
-    return {
-      taeyangin: 3.0,
-      taeumin: 6.0,
-      soyangin: -3.0,
-      soeumin: -6.0
-    };
-  }
-}
-
-// 성별별 가중치 조정 함수 (k_15_wt.DBF 데이터 기반)
-export function applyGenderWeights(scores: { [key in ConstitutionType]: number }, gender: 'male' | 'female'): { [key in ConstitutionType]: number } {
-  if (gender === 'female') {
-    // 여성의 경우 일부 가중치 조정
-    return {
-      taeyangin: scores.taeyangin * 1.1,
-      taeumin: scores.taeumin * 1.05,
-      soyangin: scores.soyangin * 0.95,
-      soeumin: scores.soeumin * 1.0
-    };
-  }
-  return scores; // 남성은 기본 가중치 사용
-}
+export default ks15Questions;

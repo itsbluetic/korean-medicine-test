@@ -1,6 +1,7 @@
-import { ConstitutionType, DiagnosisResult } from '../types';
-import { ks15Questions, calculateBMIScore, applyGenderWeights } from '../data/ks15-questions';
-import { constitutions } from '../data/constitutions';
+import { DiagnosisResult } from '@/types';
+import { ks15Questions } from '@/data/ks15-questions';
+import { ConstitutionType } from '@/data/ks15-weight-matrix';
+import { constitutions } from '@/data/constitutions';
 
 export interface KS15TestData {
   answers: { [questionId: number]: string };
@@ -11,85 +12,155 @@ export interface KS15TestData {
 }
 
 export function diagnoseKS15Constitution(testData: KS15TestData): DiagnosisResult {
-  let scores: { [key in ConstitutionType]: number } = {
-    taeyangin: 0,
-    taeumin: 0,
-    soyangin: 0,
-    soeumin: 0
-  };
+  // 3체질 점수 초기화 (태음인, 소양인, 소음인)
+  const scores: [number, number, number] = [0, 0, 0]; // [태음인, 소양인, 소음인]
 
-  // 1. 14개 질문 답변 기반 점수 계산
+  console.log('🔬 KS-15 진단 시작:', testData);
+
+  // 1. 각 질문 답변 기반 점수 계산 - 질문 데이터에서 직접 가중치 사용
   ks15Questions.forEach(question => {
     const answerId = testData.answers[question.id];
     if (answerId) {
       const selectedOption = question.options.find(option => option.id === answerId);
-      if (selectedOption) {
-        scores.taeyangin += selectedOption.weights.taeyangin;
-        scores.taeumin += selectedOption.weights.taeumin;
-        scores.soyangin += selectedOption.weights.soyangin;
-        scores.soeumin += selectedOption.weights.soeumin;
+      if (selectedOption && selectedOption.weights) {
+        const weights = testData.gender === 'male'
+          ? selectedOption.weights.male
+          : selectedOption.weights.female;
+
+        console.log(`질문 ${question.id}, 답변 ${answerId}: ${weights}`);
+
+        scores[0] += weights[0]; // 태음인
+        scores[1] += weights[1]; // 소양인
+        scores[2] += weights[2]; // 소음인
+      } else {
+        // 기본값 사용 (질문에서 is_default가 true인 옵션)
+        const defaultOption = question.options.find(opt => opt.is_default);
+        if (defaultOption && defaultOption.weights) {
+          const weights = testData.gender === 'male'
+            ? defaultOption.weights.male
+            : defaultOption.weights.female;
+
+          console.log(`질문 ${question.id} 기본값 사용: ${weights}`);
+
+          scores[0] += weights[0];
+          scores[1] += weights[1];
+          scores[2] += weights[2];
+        }
       }
     }
   });
 
+  console.log('기본 점수:', scores);
+
   // 2. BMI 기반 체형 점수 추가
   const bmi = testData.weight / Math.pow(testData.height / 100, 2);
-  const bmiScores = calculateBMIScore(bmi);
-  scores.taeyangin += bmiScores.taeyangin;
-  scores.taeumin += bmiScores.taeumin;
-  scores.soyangin += bmiScores.soyangin;
-  scores.soeumin += bmiScores.soeumin;
+  const bmiAdjustment = calculateBMIAdjustment(bmi);
+  scores[0] += bmiAdjustment[0]; // 태음인
+  scores[1] += bmiAdjustment[1]; // 소양인
+  scores[2] += bmiAdjustment[2]; // 소음인
 
-  // 3. 성별별 가중치 적용
-  scores = applyGenderWeights(scores, testData.gender);
+  console.log('BMI 조정 후 점수:', scores, 'BMI:', bmi);
 
-  // 4. 나이별 조정 (선택적)
-  if (testData.age > 50) {
-    // 50세 이상의 경우 태음인 성향 약간 증가
-    scores.taeumin += 1.0;
-  } else if (testData.age < 30) {
-    // 30세 미만의 경우 소양인 성향 약간 증가
-    scores.soyangin += 0.5;
-  }
+  // 3. 나이별 조정
+  const ageAdjustment = calculateAgeAdjustment(testData.age);
+  scores[0] += ageAdjustment[0];
+  scores[1] += ageAdjustment[1];
+  scores[2] += ageAdjustment[2];
 
-  // 5. 최고 점수의 체질 결정
-  const constitutionEntries = Object.entries(scores) as [ConstitutionType, number][];
-  const sortedScores = constitutionEntries.sort(([,a], [,b]) => b - a);
-  const primaryConstitution = sortedScores[0][0];
-  const primaryScore = sortedScores[0][1];
-  const secondaryScore = sortedScores[1][1];
+  console.log('나이 조정 후 점수:', scores);
 
-  // 6. 신뢰도 계산 (점수 차이 기반)
-  const scoreDiff = primaryScore - secondaryScore;
-  const totalRange = Math.max(...Object.values(scores)) - Math.min(...Object.values(scores));
-  const confidence = totalRange > 0 ? Math.min(100, Math.max(60, 60 + (scoreDiff / totalRange) * 40)) : 75;
+  // 4. 최고 점수의 체질 결정
+  const maxScore = Math.max(...scores);
+  const primaryIndex = scores.indexOf(maxScore);
 
-  // 7. 상세 분석
+  const constitutionTypes: ConstitutionType[] = ['taeumin', 'soyangin', 'soeumin'];
+  const primaryConstitution = constitutionTypes[primaryIndex];
+
+  // 5. 신뢰도 계산
+  const sortedScores = [...scores].sort((a, b) => b - a);
+  const scoreDiff = sortedScores[0] - sortedScores[1];
+  const confidence = calculateConfidence(scoreDiff, scores);
+
+  console.log('최종 진단:', primaryConstitution, '신뢰도:', confidence, '%');
+
+  // 6. 결과 정규화 (0-100 스케일)
+  const minScore = Math.min(...scores);
+  const maxRange = Math.max(...scores) - minScore;
+
+  const normalizedScores = {
+    taeyangin: 0, // KS-15에서는 태양인 진단하지 않음
+    taeumin: maxRange > 0 ? Math.round(((scores[0] - minScore) / maxRange) * 100) : 33,
+    soyangin: maxRange > 0 ? Math.round(((scores[1] - minScore) / maxRange) * 100) : 33,
+    soeumin: maxRange > 0 ? Math.round(((scores[2] - minScore) / maxRange) * 100) : 33,
+  };
+
+  // 7. 상세 분석 생성
   const analysis = generateKS15Analysis(scores, testData, bmi);
 
   return {
-    constitution: primaryConstitution,
+    constitution: primaryConstitution as ConstitutionType,
     confidence: Math.round(confidence),
-    scores: Object.fromEntries(
-      constitutionEntries.map(([type, score]) => [
-        type,
-        Math.round((score + 20) * 2.5) // 정규화 (0-100 스케일)
-      ])
-    ) as { [key in ConstitutionType]: number },
-    details: constitutions[primaryConstitution],
+    scores: normalizedScores,
+    details: constitutions[primaryConstitution === 'taeumin' ? 'taeumin' :
+                         primaryConstitution === 'soyangin' ? 'soyangin' : 'soeumin'] || constitutions.taeumin,
     bmi: Math.round(bmi * 10) / 10,
     analysis
   };
 }
 
+function calculateBMIAdjustment(bmi: number): [number, number, number] {
+  // BMI에 따른 체질 성향 조정
+  if (bmi < 18.5) {
+    // 저체중 - 소음인 성향 증가
+    return [0, 0, 1.0];
+  } else if (bmi < 23) {
+    // 정상체중 - 균형
+    return [0, 0.5, 0];
+  } else if (bmi < 25) {
+    // 과체중 - 태음인 성향 증가
+    return [1.0, 0, 0];
+  } else if (bmi < 30) {
+    // 비만 - 태음인 성향 강화
+    return [2.0, -0.5, -0.5];
+  } else {
+    // 고도비만 - 태음인 성향 매우 강화
+    return [3.0, -1.0, -1.0];
+  }
+}
+
+function calculateAgeAdjustment(age: number): [number, number, number] {
+  if (age < 30) {
+    // 젊은 층 - 소양인 성향 증가
+    return [0, 0.5, 0];
+  } else if (age > 50) {
+    // 중년 이후 - 태음인 성향 증가
+    return [1.0, 0, 0];
+  } else {
+    return [0, 0, 0];
+  }
+}
+
+function calculateConfidence(scoreDiff: number, scores: [number, number, number]): number {
+  // 점수 차이가 클수록 신뢰도 높음
+  const maxScore = Math.max(...scores);
+  const minScore = Math.min(...scores);
+  const totalRange = maxScore - minScore;
+
+  if (totalRange === 0) return 70; // 모든 점수가 같으면 70%
+
+  const relativeGap = scoreDiff / totalRange;
+  const baseConfidence = 60;
+  const confidenceBoost = relativeGap * 35;
+
+  return Math.min(95, Math.max(60, baseConfidence + confidenceBoost));
+}
+
 function generateKS15Analysis(
-  scores: { [key in ConstitutionType]: number },
+  scores: [number, number, number],
   testData: KS15TestData,
   bmi: number
 ): string[] {
   const analysis: string[] = [];
-  const sortedScores = Object.entries(scores)
-    .sort(([,a], [,b]) => b - a) as [ConstitutionType, number][];
 
   // BMI 분석
   let bmiCategory = '';
@@ -104,10 +175,9 @@ function generateKS15Analysis(
   // 성별 분석
   analysis.push(`${testData.gender === 'male' ? '남성' : '여성'}의 체질적 특성을 고려하여 진단하였습니다.`);
 
-  // 점수 분석
-  const primaryScore = sortedScores[0][1];
-  const secondaryScore = sortedScores[1][1];
-  const scoreDiff = primaryScore - secondaryScore;
+  // 점수 분포 분석
+  const sortedScores = [...scores].sort((a, b) => b - a);
+  const scoreDiff = sortedScores[0] - sortedScores[1];
 
   if (scoreDiff > 5) {
     analysis.push('뚜렷한 체질적 특징을 보여 진단 신뢰도가 높습니다.');
@@ -124,22 +194,10 @@ function generateKS15Analysis(
     analysis.push('중년 이후로서 체질에 맞는 건강관리가 특히 중요합니다.');
   }
 
-  // 상위 2개 체질 언급
-  const primaryName = getConstitutionKoreanName(sortedScores[0][0]);
-  const secondaryName = getConstitutionKoreanName(sortedScores[1][0]);
-  analysis.push(`${primaryName}의 특성이 가장 강하며, ${secondaryName}의 특성도 일부 나타납니다.`);
+  // KS-15 표준 언급
+  analysis.push('KS-15 표준 평가도구를 사용한 의료급 진단입니다.');
 
   return analysis;
-}
-
-function getConstitutionKoreanName(constitution: ConstitutionType): string {
-  const names = {
-    taeyangin: '태양인',
-    taeumin: '태음인',
-    soyangin: '소양인',
-    soeumin: '소음인'
-  };
-  return names[constitution];
 }
 
 // KS-15 테스트 완성도 확인
