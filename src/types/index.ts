@@ -1,23 +1,28 @@
-// 사상체질 타입
-export type ConstitutionType = "taeyang" | "taeeum" | "soyang" | "soeum";
+// 사상체질 타입 (KS-15 표준 명명법)
+export type ConstitutionType = "taeyangin" | "taeumin" | "soyangin" | "soeumin";
+
+// 레거시 호환성을 위한 타입 매핑
+export type LegacyConstitutionType = "taeyang" | "taeeum" | "soyang" | "soeum";
 
 // 질문 타입
 export interface Question {
   id: number;
   category: QuestionCategory;
-  text: string;
+  question: string; // KS-15에서는 'question' 사용
   options: QuestionOption[];
 }
 
-// 질문 카테고리
+// 질문 카테고리 (KS-15 표준)
 export type QuestionCategory =
-  | "physique" // 체형
-  | "personality" // 성격
+  | "physique" // 체형/BMI
+  | "personality" // 성격 (심성)
   | "digestion" // 소화
   | "sleep" // 수면
   | "emotion" // 감정
-  | "temperature" // 체온
-  | "behavior"; // 행동
+  | "temperature" // 체온/온도반응
+  | "behavior" // 행동
+  | "bowel" // 대변
+  | "urination"; // 소변
 
 // 질문 옵션
 export interface QuestionOption {
@@ -26,15 +31,25 @@ export interface QuestionOption {
   weights: ConstitutionWeights;
 }
 
-// 각 체질별 가중치
+// 각 체질별 가중치 (KS-15 표준)
 export interface ConstitutionWeights {
-  taeyang: number;
-  taeeum: number;
-  soyang: number;
-  soeum: number;
+  taeyangin: number;
+  taeumin: number;
+  soyangin: number;
+  soeumin: number;
 }
 
-// 테스트 결과
+// KS-15 진단 결과
+export interface DiagnosisResult {
+  constitution: ConstitutionType;
+  confidence: number;
+  scores: { [key in ConstitutionType]: number };
+  details: ConstitutionInfo;
+  bmi: number;
+  analysis: string[];
+}
+
+// 기존 테스트 결과 (레거시 호환)
 export interface TestResult {
   constitution: ConstitutionType;
   scores: ConstitutionWeights;

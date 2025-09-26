@@ -1,8 +1,8 @@
 import { ConstitutionInfo, ConstitutionType } from "@/types";
 
-export const constitutionInfo: Record<ConstitutionType, ConstitutionInfo> = {
-  taeyang: {
-    name: "Taeyang",
+export const constitutions: Record<ConstitutionType, ConstitutionInfo> = {
+  taeyangin: {
+    name: "Taeyangin",
     koreanName: "태양인",
     description:
       "간대폐소형으로 간 기능이 발달하고 폐 기능이 약한 체질입니다. 진취적이고 창의적이며 리더십이 강합니다.",
@@ -44,8 +44,8 @@ export const constitutionInfo: Record<ConstitutionType, ConstitutionInfo> = {
       "과격한 운동은 피하기",
     ],
   },
-  taeeum: {
-    name: "Taeeum",
+  taeumin: {
+    name: "Taeumin",
     koreanName: "태음인",
     description:
       "폐대간소형으로 폐 기능이 발달하고 간 기능이 약한 체질입니다. 침착하고 신중하며 끈기가 강합니다.",
@@ -87,8 +87,8 @@ export const constitutionInfo: Record<ConstitutionType, ConstitutionInfo> = {
       "꾸준하고 지속적인 운동",
     ],
   },
-  soyang: {
-    name: "Soyang",
+  soyangin: {
+    name: "Soyangin",
     koreanName: "소양인",
     description:
       "비대신소형으로 비장 기능이 발달하고 신장 기능이 약한 체질입니다. 활발하고 사교적이며 외향적입니다.",
@@ -130,8 +130,8 @@ export const constitutionInfo: Record<ConstitutionType, ConstitutionInfo> = {
       "과격한 운동보다 꾸준한 운동",
     ],
   },
-  soeum: {
-    name: "Soeum",
+  soeumin: {
+    name: "Soeumin",
     koreanName: "소음인",
     description:
       "신대비소형으로 신장 기능이 발달하고 비장 기능이 약한 체질입니다. 섬세하고 신중하며 내성적입니다.",
@@ -178,5 +178,8 @@ export const constitutionInfo: Record<ConstitutionType, ConstitutionInfo> = {
 export const getConstitutionInfo = (
   type: ConstitutionType
 ): ConstitutionInfo => {
-  return constitutionInfo[type];
+  return constitutions[type];
 };
+
+// 레거시 호환성을 위한 별칭
+export const constitutionInfo = constitutions;
