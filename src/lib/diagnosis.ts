@@ -1,6 +1,6 @@
 import {
   ConstitutionType,
-  ConstitutionWeights,
+  LegacyConstitutionWeights,
   TestResult,
   UserAnswer,
 } from "@/types";
@@ -9,8 +9,8 @@ import { getConstitutionInfo } from "@/data/constitutions";
 
 export function calculateConstitutionScores(
   answers: UserAnswer[]
-): ConstitutionWeights {
-  const scores: ConstitutionWeights = {
+): LegacyConstitutionWeights {
+  const scores: LegacyConstitutionWeights = {
     taeyang: 0,
     taeeum: 0,
     soyang: 0,
@@ -37,7 +37,7 @@ export function calculateConstitutionScores(
 }
 
 export function determineConstitution(
-  scores: ConstitutionWeights
+  scores: LegacyConstitutionWeights
 ): ConstitutionType {
   const constitutions: ConstitutionType[] = [
     "taeyang",

@@ -1,6 +1,6 @@
 import { DiagnosisResult } from '../types';
 import { ks15Questions } from '../data/ks15-questions-corrected';
-import { constitutionKoreanNames, ConstitutionType } from '../data/ks15-weight-matrix';
+import { ConstitutionType } from '../data/ks15-weight-matrix';
 import { constitutions } from '../data/constitutions';
 
 export interface KS15TestData {
@@ -13,7 +13,7 @@ export interface KS15TestData {
 
 export function diagnoseKS15Constitution(testData: KS15TestData): DiagnosisResult {
   // 3체질 점수 초기화 (태음인, 소양인, 소음인)
-  let scores: [number, number, number] = [0, 0, 0]; // [태음인, 소양인, 소음인]
+  const scores: [number, number, number] = [0, 0, 0]; // [태음인, 소양인, 소음인]
 
   console.log('🔬 KS-15 진단 시작:', testData);
 
@@ -97,9 +97,9 @@ export function diagnoseKS15Constitution(testData: KS15TestData): DiagnosisResul
   const analysis = generateKS15Analysis(scores, testData, bmi, primaryConstitution);
 
   return {
-    constitution: primaryConstitution as any, // 기존 타입 호환성
+    constitution: primaryConstitution as ConstitutionType,
     confidence: Math.round(confidence),
-    scores: normalizedScores as any, // 기존 타입 호환성
+    scores: normalizedScores as { [key in ConstitutionType]: number },
     details: constitutions[primaryConstitution === 'taeumin' ? 'taeumin' :
                          primaryConstitution === 'soyangin' ? 'soyangin' : 'soeumin'] || constitutions.taeumin,
     bmi: Math.round(bmi * 10) / 10,
@@ -158,7 +158,7 @@ function generateKS15Analysis(
   scores: [number, number, number],
   testData: KS15TestData,
   bmi: number,
-  primaryConstitution: ConstitutionType
+  _primaryConstitution: ConstitutionType
 ): string[] {
   const analysis: string[] = [];
 

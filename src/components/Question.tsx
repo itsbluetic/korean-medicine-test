@@ -1,8 +1,8 @@
-import { Question as QuestionType } from "@/types";
+import { Question as QuestionType, LegacyQuestion } from "@/types";
 import { useSwipe } from "@/hooks/useSwipe";
 
 interface QuestionProps {
-  question: QuestionType;
+  question: QuestionType | LegacyQuestion;
   selectedOptionId?: string;
   onOptionSelect: (optionId: string) => void;
   onSwipeLeft?: () => void;
@@ -79,7 +79,7 @@ export default function Question({
           id={`question-${question.id}-description`}
           className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
         >
-          {question.text}
+          {('text' in question ? question.text : question.question) || 'No question text available'}
         </p>
       </div>
 

@@ -1,6 +1,6 @@
-import { Question } from "@/types";
+import { LegacyQuestion } from "@/types";
 
-export const questions: Question[] = [
+export const questions: LegacyQuestion[] = [
   // 체형 관련 질문
   {
     id: 1,

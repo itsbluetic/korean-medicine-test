@@ -8,7 +8,8 @@ export type LegacyConstitutionType = "taeyang" | "taeeum" | "soyang" | "soeum";
 export interface Question {
   id: number;
   category: QuestionCategory;
-  question: string; // KS-15에서는 'question' 사용
+  question?: string; // KS-15에서 사용
+  text?: string; // 기존 시스템에서 사용
   options: QuestionOption[];
 }
 
@@ -24,11 +25,34 @@ export type QuestionCategory =
   | "bowel" // 대변
   | "urination"; // 소변
 
-// 질문 옵션
+// 레거시 질문 옵션 (기존 시스템)
+export interface LegacyQuestionOption {
+  id: string;
+  text: string;
+  weights: LegacyConstitutionWeights;
+}
+
+// 질문 옵션 (KS-15)
 export interface QuestionOption {
   id: string;
   text: string;
   weights: ConstitutionWeights;
+}
+
+// 레거시 질문 (기존 시스템)
+export interface LegacyQuestion {
+  id: number;
+  category: QuestionCategory;
+  text: string;
+  options: LegacyQuestionOption[];
+}
+
+// 레거시 체질별 가중치 (기존 시스템)
+export interface LegacyConstitutionWeights {
+  taeyang: number;
+  taeeum: number;
+  soyang: number;
+  soeum: number;
 }
 
 // 각 체질별 가중치 (KS-15 표준)

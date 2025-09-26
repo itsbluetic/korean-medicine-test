@@ -89,7 +89,7 @@ export const useKS15Test = () => {
       return Math.round((weight / Math.pow(height / 100, 2)) * 10) / 10;
     }
     return 0;
-  }, [testState.userInfo.height, testState.userInfo.weight]);
+  }, [testState.userInfo]);
 
   // 테스트 완성도 확인
   const getCompletionStatus = useCallback(() => {
