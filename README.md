@@ -4,7 +4,9 @@ Next.js 기반의 사상의학 체질 진단 웹 애플리케이션입니다. �
 
 ## 🌐 라이브 데모
 
-**🚀 [지금 바로 테스트하기](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)**
+**🚀 [기본 체질 테스트](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)** - 간편한 10개 질문으로 4체질 진단
+
+**⚕️ [KS-15 의료급 진단](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app/ks15-test)** - 실제 의료 데이터 기반 정밀 진단
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?style=flat-square&logo=github)](https://github.com/itsbluetic/korean-medicine-test)
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-green?style=flat-square&logo=vercel)](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)
