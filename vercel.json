@@ -4,6 +4,11 @@
   "framework": "nextjs",
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "app/**/*.js": {
+      "maxDuration": 10
+    }
+  },
   "headers": [
     {
       "source": "/sw.js",
@@ -45,6 +50,18 @@
     {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/ks15-test",
+      "destination": "/medical-test",
+      "permanent": true
+    },
+    {
+      "source": "/ks15-test/:path*",
+      "destination": "/medical-test/:path*",
+      "permanent": true
     }
   ]
 }

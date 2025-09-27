@@ -31,49 +31,33 @@ export default function Home() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
         <ThemeToggle />
         <div className="max-w-2xl mx-auto space-y-8">
-          {/* 기존 간소화 테스트 */}
           <TestStart onStartTest={startTest} />
 
-          {/* 구분선 */}
-          <div className="flex items-center">
-            <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
-            <span className="px-4 text-gray-500 dark:text-gray-400 text-sm">또는</span>
-            <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
-          </div>
-
-          {/* KS-15 표준 테스트 */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-100 dark:border-gray-700">
-            <div className="text-center space-y-4">
-              <div className="inline-block p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
-                <svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                🩺 KS-15 표준 진단
-              </h2>
-
-              <p className="text-gray-600 dark:text-gray-300 max-w-md mx-auto">
-                의료급 정확도의 KS-15 표준 평가도구로 더 정밀한 체질 진단을 받아보세요.
-                BMI 계산과 성별/연령별 맞춤 분석이 포함됩니다.
-              </p>
-
-              <div className="flex flex-wrap justify-center gap-2 text-xs text-gray-500 dark:text-gray-400">
-                <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded">14개 질문</span>
-                <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded">BMI 포함</span>
-                <span className="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-2 py-1 rounded">의료 데이터 기반</span>
-                <span className="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 px-2 py-1 rounded">성별별 가중치</span>
-              </div>
-
-              <a
-                href="/ks15-test"
-                className="inline-flex items-center justify-center w-full max-w-xs mx-auto bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 px-8 rounded-xl hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* 의료급 진단 안내 */}
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-100 dark:border-blue-800">
+            <div className="text-center space-y-3">
+              <div className="inline-block p-2 bg-blue-100 dark:bg-blue-800 rounded-full">
+                <svg className="w-6 h-6 text-blue-600 dark:text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
-                KS-15 테스트 시작
+              </div>
+
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                더 정밀한 진단이 필요하신가요?
+              </h3>
+
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                의료급 KS-15 표준 진단 시스템이 별도로 제공됩니다.
+                BMI와 성별/연령별 맞춤 분석으로 더욱 정확한 결과를 얻으실 수 있습니다.
+              </p>
+
+              <a
+                href="https://korean-medicine-ks15.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors duration-200"
+              >
+                KS-15 의료급 진단 →
               </a>
             </div>
           </div>

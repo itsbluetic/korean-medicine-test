@@ -22,6 +22,22 @@ const withPWA = require("next-pwa")({
 
 const nextConfig: NextConfig = {
   /* config options here */
+  experimental: {
+    optimizePackageImports: ['@/components', '@/lib', '@/hooks'],
+  },
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
+  output: 'standalone',
+  images: {
+    unoptimized: true
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 };
 
 export default withPWA(nextConfig);

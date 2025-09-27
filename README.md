@@ -4,20 +4,20 @@ Next.js 기반의 사상의학 체질 진단 웹 애플리케이션입니다. �
 
 ## 🌐 라이브 데모
 
-**🚀 [기본 체질 테스트](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)** - 간편한 10개 질문으로 4체질 진단
+**🚀 [기본 체질 테스트 시작하기](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)** - 간편한 10개 질문으로 4체질 진단
 
-**⚕️ [KS-15 의료급 진단](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app/medical-test)** - 실제 의료 데이터 기반 정밀 진단
+**⚕️ [KS-15 의료급 진단](https://korean-medicine-ks15.vercel.app)** - 실제 의료 데이터 기반 정밀 진단 (별도 시스템)
 
 [![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?style=flat-square&logo=github)](https://github.com/itsbluetic/korean-medicine-test)
 [![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-green?style=flat-square&logo=vercel)](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)
 
 ## 🎯 프로젝트 개요
 
-- **듀얼 진단 시스템**: 간소화 테스트 + KS-15 의료급 진단
-- **사상의학 기반**: 전통 한의학의 사상체질 이론 적용
-- **KS-15 표준**: 실제 의료 데이터 기반 정밀 진단 (3체질: 태음인, 소양인, 소음인)
-- **문답형 테스트**: 12-15개 질문으로 체형, 성격, 소화 등 다양한 영역 평가
-- **맞춤형 결과**: BMI, 성별, 연령 고려한 개인맞춤 분석
+- **기본 4체질 진단**: 간편한 10개 질문으로 빠른 체질 진단
+- **사상의학 기반**: 전통 한의학의 사상체질 이론 적용 (태양인, 태음인, 소양인, 소음인)
+- **PWA 지원**: 오프라인 사용 가능, 홈 화면 설치
+- **완전 무료**: 개인정보 수집 없음, 로컬 저장
+- **의료급 진단**: KS-15 표준 시스템은 [별도 웹사이트](https://korean-medicine-ks15.vercel.app)에서 제공
 
 ## ✨ 주요 기능
 
