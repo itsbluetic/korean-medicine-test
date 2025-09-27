@@ -2,6 +2,13 @@
 
 Next.js 기반의 사상의학 체질 진단 웹 애플리케이션입니다. 문답형 테스트를 통해 태양인, 태음인, 소양인, 소음인 중 자신의 체질을 진단할 수 있습니다.
 
+## 🌐 라이브 데모
+
+**🚀 [체질 진단 테스트 시작하기](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)**
+
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-blue?style=flat-square&logo=github)](https://github.com/itsbluetic/korean-medicine-test)
+[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-green?style=flat-square&logo=vercel)](https://korean-medicine-test-1ks5cc8l1-sangwan-ans-projects.vercel.app)
+
 ## 🎯 프로젝트 개요
 
 - **사상의학 기반**: 전통 한의학의 사상체질 이론 적용
